@@ -4,24 +4,39 @@ let pSpeedC = 2
 let gunY = 280
 let enemyN = 5
 let ammo = 50
+let newAmmo = 0
 let ammoColor = 0
 let ammoColor2 = 3
 let ammoColor3 = 3
 let bulletStatus = 20
 let score = 0
+let score2 = 0
 let lives = 10
 let escaped = 0
 let enemySpeed = 1
 let bosSpeed = 0.3
 let bosLives= 20
-
+let gunT = 1000
+let bulletSize = 5
+let score3 = 0
 
 let bulletPosy = 300
 let bulletSpeed = 8
+let back = (186, 131, 73)
+
+let roomArray1 = [190, 186]
+
+let roomArray2 = [131, 179]
+
+let roomArray3 = [131, 73]
+
+
 
 let bullets = []
 let enemies = []
 let boss = []
+let ammoC = []
+let powerups = []
 
 function setup() {
   createCanvas(400, 400);
@@ -44,6 +59,30 @@ function setup() {
     boss.push(bos)
   }
   
+   for (let i = 0; i<1; i++){
+  let ammoCoin = {
+    
+    x: random (140,250),
+    y: random (50,350),
+    
+  }
+  
+ ammoC.push(ammoCoin)
+  
+  }
+  
+  for (let i = 0; i<1; i++){
+  let powerup = {
+    
+    x: random (140,250),
+    y: random (50,350),
+    
+  }
+  
+ powerups.push(powerup)
+  
+  }
+  
 
 
 }
@@ -51,7 +90,8 @@ function draw() {
   background(186, 131, 73);
   
   
-  enemySpeed += .00003
+  
+  enemySpeed += 0.0004
   
   let m = millis();
 let mc = millis();
@@ -119,11 +159,14 @@ let mc = millis();
   for (let bullet of bullets) {
     
     fill(255, 179, 3,100)
-  ellipse(bullet.x,bullet.y, 5,15)
+  ellipse(bullet.x,bullet.y, bulletSize,15)
     bullet.y -= bulletStatus
   }
   
- if (score >= 5){
+  
+  
+  
+ if (score >= 50){
     
 
   for (let bos of boss){
@@ -163,6 +206,9 @@ let mc = millis();
     
     if (enemy.y>height){
       enemies.splice(enemies.indexOf(enemy),1)
+      
+      escaped ++
+      
        let respawn2 = {
       x: random (140,250),
       y: random (-800,0)
@@ -171,7 +217,7 @@ let mc = millis();
          
     }
         enemies.push(respawn2)
-      escaped += 1
+      
     }
     
     
@@ -183,17 +229,16 @@ let mc = millis();
   fill(24, 112, 94)
    ellipse(pSpeedx,pSpeedy,40)
   
-  fill(26, 24, 23)
+  fill(26, 24, 23,gunT)
   rect(pSpeedx,gunY, 10, 40)
   
-  fill(26, 24, 23)
+  fill(26, 24, 23,gunT)
   rect(pSpeedx,gunY, 8, 45)
   
   fill(235, 174, 108)
   ellipse(pSpeedx,pSpeedy,33)
   
-  fill(ammoColor,ammoColor2,ammoColor3)
-  text(ammo,117,140,200,160)
+
   
    
   for (let enemy of enemies){
@@ -208,6 +253,8 @@ let mc = millis();
     }
         enemies.push(respawn)
         score += 1
+        score2 += 1
+        score3 += 1
         
       }
     }
@@ -271,6 +318,9 @@ let mc = millis();
   }
   }
   
+  
+  
+  
   if (keyIsDown(39) == true){
     pSpeedx += pSpeedC
   }
@@ -325,8 +375,8 @@ let mc = millis();
     
   }
   
-  text(score,120,200,200)
-  text(lives,120,300,200)
+
+  
   
   
   
@@ -337,41 +387,198 @@ let mc = millis();
     
   }
   
-  text(escaped,200,200,500)
-  fill(255)
-  text(lives,70,120,100)
   
+  fill(0)
+    text(score,130,200,200)
+  fill(0)
+    text('score',120,190,200)
+  
+  
+  fill(0)
+  text('escaped convicts',53,145,100)
+  fill(0)
+  text(escaped,90,160,100)
+  fill(255)
+  text('lives',85,105,100)
+  fill(255)
+  text(lives,90,120,100)
+    fill(ammoColor,ammoColor2,ammoColor3)
+  text('ammo',117,130,200,160)
+  fill(ammoColor,ammoColor2,ammoColor3)
+  text(ammo,117,140,200,160)
   
  if (score % 4 == true){
   
  }
   
-  if (lives == 0){
-    
-    background(0)
-    text('you loose',220,220,100,100)
-    noLoop()
-    
-  }
+  
   
   
 
   
   
-  for (let i = 0; i < 1; i++){
+  for (let i = 0; i < 100; i++){
   
     if (score % 5 == 0){
       
-      console.log('10')
+      // console.log('10')
       
     }
     
     
 }
+  for (let i= 0; i< 4; i++){
+if (newAmmo >= 5){
+ 
+  
 
-
+  
+  for (let ammoCoin of ammoC){
+    
+    fill(241, 250, 120)
+    ellipse(ammoCoin.x,ammoCoin.y,20)
+  }
+  
+  
     
     
+   for (let ammoCoin of ammoC){
+  if (dist(ammoCoin.x,ammoCoin.y,pSpeedx,pSpeedy) < 10){
+    
+    const synth = new Tone.Synth().toDestination();
+const now = Tone.now();
+// trigger the attack immediately
+synth.triggerAttack("C7", now);
+  // wait one second before triggering the release
+synth.triggerRelease(now + 0.01);
+    newAmmo -= newAmmo
+    
+    ammo += 20
+    
+    ammoC.splice(ammoC.indexOf(ammoCoin),1)
+    
+             let respawn5 = {
+       x: random (140,250),
+    y: random (50,350),
+    }
+        ammoC.push(respawn5)
+    
+  }
+  }
+  }
+}
+  
+  if (score3 >= 20){
+  for (let powerup of powerups){
+    
+    fill (171, 119, 217)
+    ellipse(powerup.x,powerup.y,20)
+    
+  }
+  
+  
+   for (let powerup of powerups){
+  if (dist(powerup.x,powerup.y,pSpeedx,pSpeedy) < 10){
+     powerups.splice(powerups.indexOf(powerup),1)
+    
+     const synth = new Tone.Synth().toDestination();
+const now = Tone.now();
+// trigger the attack immediately
+synth.triggerAttack("C5", now);
+  // wait one second before triggering the release
+synth.triggerRelease(now + 0.01);
+    
+    bulletSize += 10
+    
+    
+    
+    
+    score3 -= score3
+    
+    
+    
+
+    
+  
+    
+    
+    
+             let respawn6 = {
+       x: random (140,250),
+    y: random (50,350),
+    }
+        powerups.push(respawn6)
+    
+  }
+  }
+  }
+  
+  
+//   if (score3 >= 20){
+      
+//       bulletSize -= 10
+      
+//     }
+  
+  
+  
+  if (score2 == 5){
+    
+    
+    enemyN += 3
+    score2 -= score2
+    
+    
+    
+  }
+  
+  if (escaped >= 20){
+    
+      background(0)
+    fill(255)
+    text('you lose',220,220,100,100)
+    noLoop()
+    
+    
+  }
+  
+  
+  // console.log(newAmmo)
+    if (lives == 0){
+    
+    background(0)
+      fill(255)
+    text('you lose',220,220,100,100)
+    noLoop()
+    
+  }
+  
+  
+//   if (pSpeedy,gunY >= 290){
+    
+//     pSpeedx = 200
+//       pSpeeedy = 300
+//       gunY = 280
+    
+    
+    
+    
+//   }
+  
+  
+  if (score >= 100){
+    
+    fill(252, 23, 3, 10)
+    rect(200,200,1000)
+    
+    fill(0)
+    text('frenzy mode', 200,200,100)
+    
+    enemySpeed += 0.008
+    
+    
+  }
+  
   }
   
   
@@ -379,15 +586,22 @@ let mc = millis();
 
 function mousePressed (){
   
-  
+  const synth = new Tone.Synth().toDestination();
+const now = Tone.now();
+// trigger the attack immediately
+synth.triggerAttack("C1", now);
+  // wait one second before triggering the release
+synth.triggerRelease(now + 0.01);
   
   ammo -=1
+  
+  newAmmo += 1
   
   let bullet = {
     
     x: pSpeedx,
     y: bulletPosy, 
-    
+        
     
   }
   
@@ -395,3 +609,14 @@ function mousePressed (){
   
 }
 
+function keyIsPressed(){
+     
+  if (keyIsDown(83) == true ){
+    
+    console.log('yes')
+    
+  }
+  
+  
+  
+}
